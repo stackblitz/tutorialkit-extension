@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import grayMatter from 'gray-matter';
 import { Lesson } from '../models/Lesson';
+import { getIcon } from '../utils/getIcon';
 
 const metadataFiles = ['meta.md', 'meta.mdx', 'content.md', 'content.mdx'];
 
@@ -46,7 +47,10 @@ class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
           const metadataFileContent = fs.readFileSync(metadataFilePath, 'utf8');
           const parsedContent = grayMatter(metadataFileContent);
           lesson.name = parsedContent.data.title;
-          lesson.metadata = {_path: metadataFilePath, ...parsedContent.data as any};
+          lesson.metadata = {
+            _path: metadataFilePath,
+            ...(parsedContent.data as any),
+          };
           lessons.push(lesson);
         }
       }
@@ -65,18 +69,23 @@ class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
     // this._onDidChangeTreeData.fire();
   }
 
-  getTreeItem(element: Lesson): vscode.TreeItem {
-    const treeItem = new vscode.TreeItem(element.name);
+  getTreeItem(lesson: Lesson): vscode.TreeItem {
+    const treeItem = new vscode.TreeItem(lesson.name);
     treeItem.collapsibleState =
-      element.children.length > 0
+      lesson.children.length > 0
         ? vscode.TreeItemCollapsibleState.Collapsed
         : vscode.TreeItemCollapsibleState.None;
 
     treeItem.command = {
       command: 'tutorial.goto',
       title: 'Goto',
-      arguments: [element.path, element.metadata],
+      arguments: [lesson.path, lesson.metadata],
     };
+
+    treeItem.iconPath =
+      lesson.metadata?.type === 'lesson'
+        ? getIcon('lesson.svg')
+        : getIcon('chapter.svg');
 
     return treeItem;
   }
