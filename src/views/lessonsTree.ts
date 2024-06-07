@@ -6,6 +6,7 @@ import { Lesson } from '../models/Lesson';
 import { getIcon } from '../utils/getIcon';
 
 const metadataFiles = ['meta.md', 'meta.mdx', 'content.md', 'content.mdx'];
+export const tutorialMimeType = 'application/tutorialkit.unit';
 
 class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
   private lessons: Lesson[] = [];
@@ -76,6 +77,8 @@ class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
         ? vscode.TreeItemCollapsibleState.Collapsed
         : vscode.TreeItemCollapsibleState.None;
 
+    treeItem.contextValue = lesson.metadata?.type;
+
     treeItem.command = {
       command: 'tutorial.goto',
       title: 'Goto',
@@ -105,6 +108,16 @@ export function useLessonTree() {
     vscode.window.createTreeView('tutorialkit-lessons-tree', {
       treeDataProvider: lessonsTreeDataProvider,
       canSelectMany: true,
+      dragAndDropController: {
+        dragMimeTypes: [tutorialMimeType],
+        dropMimeTypes: [tutorialMimeType],
+        handleDrag(elements: Lesson[], dataTransfer) {
+          console.log({ elements, dataTransfer });
+        },
+        handleDrop(target: Lesson, dataTransfer) {
+          console.log({ target, dataTransfer });
+        },
+      },
     });
 
     vscode.commands.registerCommand('lessonsTree.refresh', () => {

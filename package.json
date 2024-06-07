@@ -16,6 +16,14 @@
       {
         "command": "tutorialkit.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "tutorialkit.add-lesson",
+        "title": "Add Lesson"
+      },
+      {
+        "command": "tutorialkit.add-chapter",
+        "title": "Add Chapter"
       }
     ],
     "views": {
@@ -26,6 +34,18 @@
           "visibility": "visible",
           "initialSize": 3,
           "___when": "tutorialkit:enabled"
+        }
+      ]
+    },
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "tutorialkit.add-lesson",
+          "when": "view == tutorialkit-lessons-tree && viewItem == chapter"
+        },
+        {
+          "command": "tutorialkit.add-chapter",
+          "when": "view == tutorialkit-lessons-tree && viewItem == part"
         }
       ]
     }
