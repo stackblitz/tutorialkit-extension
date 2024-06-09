@@ -67,7 +67,7 @@ class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
 
   refresh(): void {
     this.loadLessons();
-    // this._onDidChangeTreeData.fire();
+    this._onDidChangeTreeData.fire(undefined);
   }
 
   getTreeItem(lesson: Lesson): vscode.TreeItem {
@@ -120,12 +120,12 @@ export function useLessonTree() {
       },
     });
 
-    vscode.commands.registerCommand('lessonsTree.refresh', () => {
+    vscode.commands.registerCommand('tutorialkit.refresh', () => {
       lessonsTreeDataProvider.refresh();
     });
   } else {
     vscode.window.showErrorMessage(
-      'Please open a workspace to use the lessons tree.',
+      'Please open a workspace to use the TutorialKit extension.',
     );
   }
 }

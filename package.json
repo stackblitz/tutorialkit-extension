@@ -2,14 +2,16 @@
   "name": "tutorialkit",
   "displayName": "TutorialKit",
   "description": "TutorialKit support in VS Code",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "engines": {
     "vscode": "^1.90.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -24,6 +26,11 @@
       {
         "command": "tutorialkit.add-chapter",
         "title": "Add Chapter"
+      },
+      {
+        "command": "tutorialkit.refresh",
+        "title": "Refresh Lessons",
+        "icon": "$(refresh)"
       }
     ],
     "views": {
@@ -38,6 +45,13 @@
       ]
     },
     "menus": {
+      "view/title": [
+        {
+          "command": "tutorialkit.refresh",
+          "when": "view == tutorialkit-lessons-tree",
+          "group": "navigation"
+        }
+      ],
       "view/item/context": [
         {
           "command": "tutorialkit.add-lesson",
@@ -51,10 +65,10 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "pnpm run compile",
+    "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "pnpm run compile && pnpm run lint",
+    "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "vscode-test"
   },
@@ -67,7 +81,10 @@
     "@vscode/test-cli": "^0.0.9",
     "@vscode/test-electron": "^2.4.0",
     "eslint": "^8.57.0",
-    "gray-matter": "^4.0.3",
     "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "case-anything": "^3.1.0"
   }
 }
