@@ -23,12 +23,12 @@ export async function addLesson(parent: Lesson) {
     throw new Error('No lesson name provided');
   }
 
-  // Create the lesson folder and content.md file
+  // Create the lesson folder and content.mdx file
   const lessonFolderPath = `${folderPath}/${lessonNumber}-${kebabCase(
     lessonName,
   )}`;
   await vscode.workspace.fs.writeFile(
-    vscode.Uri.file(`${lessonFolderPath}/content.md`),
+    vscode.Uri.file(`${lessonFolderPath}/content.mdx`),
     new TextEncoder().encode(`---\ntitle: ${lessonName}\ntype: lesson\n---\n`),
   );
 
@@ -42,7 +42,7 @@ export async function addLesson(parent: Lesson) {
 
   // Open the new lesson
   return vscode.commands.executeCommand('tutorial.goto', lessonFolderPath, <Lesson['metadata']>{
-    _path: `${lessonFolderPath}/content.md`,
+    _path: `${lessonFolderPath}/content.mdx`,
     type: 'lesson',
     title: lessonName,
   });
