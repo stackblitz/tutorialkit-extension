@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import grayMatter from 'gray-matter';
 import { Lesson } from '../models/Lesson';
 import { getIcon } from '../utils/getIcon';
+import { CMD } from '../commands';
 
 const metadataFiles = ['meta.md', 'meta.mdx', 'content.md', 'content.mdx'];
 export const tutorialMimeType = 'application/tutorialkit.unit';
@@ -12,19 +13,19 @@ class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
   private lessons: Lesson[] = [];
 
   constructor(
-    private readonly workspaceRoot: string,
+    private readonly workspaceRoot: vscode.Uri,
     private context: vscode.ExtensionContext,
   ) {
     this.loadLessons();
   }
 
   private loadLessons(): void {
-    const tutorialFolderPath = path.join(
+    const tutorialFolderPath = vscode.Uri.joinPath(
       this.workspaceRoot,
       'src',
       'content',
       'tutorial',
-    );
+    ).fsPath;
     this.lessons = this.loadLessonsFromFolder(tutorialFolderPath);
   }
 
@@ -83,8 +84,8 @@ class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
     treeItem.contextValue = lesson.metadata?.type;
 
     treeItem.command = {
-      command: 'tutorial.goto',
-      title: 'Goto',
+      command: CMD.GOTO,
+      title: 'Go to the lesson',
       arguments: [lesson.path, lesson.metadata],
     };
 
@@ -105,7 +106,7 @@ class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
 }
 
 export function useLessonTree(context: vscode.ExtensionContext) {
-  const workspaceRoot = vscode.workspace.rootPath;
+  const workspaceRoot = vscode.workspace.workspaceFolders?.[0].uri;
   if (workspaceRoot) {
     const lessonsTreeDataProvider = new LessonsTreeDataProvider(
       workspaceRoot,

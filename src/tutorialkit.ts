@@ -1,3 +1,4 @@
+import { CMD } from './commands';
 import { Lesson } from './models/Lesson';
 import * as vscode from 'vscode';
 
@@ -41,7 +42,9 @@ export async function addLesson(parent: Lesson) {
   await vscode.commands.executeCommand('tutorialkit.refresh');
 
   // Open the new lesson
-  return vscode.commands.executeCommand('tutorial.goto', lessonFolderPath, <Lesson['metadata']>{
+  return vscode.commands.executeCommand(CMD.GOTO, lessonFolderPath, <
+    Lesson['metadata']
+  >{
     _path: `${lessonFolderPath}/content.mdx`,
     type: 'lesson',
     title: lessonName,
