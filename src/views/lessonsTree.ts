@@ -11,7 +11,10 @@ export const tutorialMimeType = 'application/tutorialkit.unit';
 class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
   private lessons: Lesson[] = [];
 
-  constructor(private readonly workspaceRoot: string) {
+  constructor(
+    private readonly workspaceRoot: string,
+    private context: vscode.ExtensionContext,
+  ) {
     this.loadLessons();
   }
 
@@ -87,8 +90,8 @@ class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
 
     treeItem.iconPath =
       lesson.metadata?.type === 'lesson'
-        ? getIcon('lesson.svg')
-        : getIcon('chapter.svg');
+        ? getIcon(this.context, 'lesson.svg')
+        : getIcon(this.context, 'chapter.svg');
 
     return treeItem;
   }
@@ -101,10 +104,13 @@ class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
   }
 }
 
-export function useLessonTree() {
+export function useLessonTree(context: vscode.ExtensionContext) {
   const workspaceRoot = vscode.workspace.rootPath;
   if (workspaceRoot) {
-    const lessonsTreeDataProvider = new LessonsTreeDataProvider(workspaceRoot);
+    const lessonsTreeDataProvider = new LessonsTreeDataProvider(
+      workspaceRoot,
+      context,
+    );
     vscode.window.createTreeView('tutorialkit-lessons-tree', {
       treeDataProvider: lessonsTreeDataProvider,
       canSelectMany: true,
