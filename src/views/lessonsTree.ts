@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import grayMatter from 'gray-matter';
 import { Lesson } from '../models/Lesson';
 import { getIcon } from '../utils/getIcon';
-import { CMD } from '../commands';
+import { cmd } from '../commands';
 
 const metadataFiles = ['meta.md', 'meta.mdx', 'content.md', 'content.mdx'];
 export const tutorialMimeType = 'application/tutorialkit.unit';
@@ -91,10 +91,11 @@ class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
 
     treeItem.contextValue = lesson.metadata?.type;
 
+    const shouldOpenFile = lesson.metadata?.type === 'lesson';
     treeItem.command = {
-      command: CMD.GOTO,
+      command: cmd.goto.command,
       title: 'Go to the lesson',
-      arguments: [lesson.path, lesson.metadata],
+      arguments: [lesson.path, lesson.metadata, shouldOpenFile],
     };
 
     treeItem.iconPath =

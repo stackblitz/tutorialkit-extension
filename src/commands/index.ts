@@ -1,19 +1,37 @@
 import * as vscode from 'vscode';
 import tutorialkitGoto from './tutorialkit.goto';
-import tutorialkitAddLesson from './tutorialkit.add-lesson';
 import tutorialkitRefresh from './tutorialkit.refresh';
-import tutorialkitAddChapter from './tutorialkit.add-chapter';
+import { addChapter, addLesson } from './tutorialkit.add';
 
-export const CMD = {
+// No need to use this oursite of this file
+// – use `cmd[name].command` instead
+const CMD = {
   GOTO: 'tutorialkit.goto',
   ADD_LESSON: 'tutorialkit.add-lesson',
   ADD_CHAPTER: 'tutorialkit.add-chapter',
   REFRESH: 'tutorialkit.refresh',
 } as const;
 
+// Register all commands in Code IDE
 export function useCommands() {
   vscode.commands.registerCommand(CMD.GOTO, tutorialkitGoto);
-  vscode.commands.registerCommand(CMD.ADD_LESSON, tutorialkitAddLesson);
-  vscode.commands.registerCommand(CMD.ADD_CHAPTER, tutorialkitAddChapter);
+  vscode.commands.registerCommand(CMD.ADD_LESSON, addLesson);
+  vscode.commands.registerCommand(CMD.ADD_CHAPTER, addChapter);
   vscode.commands.registerCommand(CMD.REFRESH, tutorialkitRefresh);
+}
+
+// Create typesafe commands
+export const cmd = {
+  goto: createExecutor<typeof tutorialkitGoto>(CMD.GOTO),
+  addLesson: createExecutor<typeof addLesson>(CMD.ADD_LESSON),
+  addChapter: createExecutor<typeof addChapter>(CMD.ADD_CHAPTER),
+  refresh: createExecutor<typeof tutorialkitRefresh>(CMD.REFRESH),
+};
+
+function createExecutor<T extends (...args: any) => any>(name: string) {
+  function executor(...args: Parameters<T>) {
+    return vscode.commands.executeCommand(name, ...args);
+  }
+  executor.command = name;
+  return executor;
 }

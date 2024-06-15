@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
 import { Lesson } from '../models/Lesson';
 
-export default (path: string, meta: Lesson['metadata']) => {
+export default (path: string, meta: Lesson['metadata'], openFile = false) => {
   vscode.commands
     .executeCommand('revealInExplorer', vscode.Uri.file(path))
     .then(() => {
-      if (meta?.type === 'lesson') {
-        vscode.workspace.openTextDocument(meta._path).then((document) => {
+      if (openFile) {
+        vscode.workspace.openTextDocument(meta!._path).then((document) => {
           vscode.window.showTextDocument(document);
         });
       }

@@ -6,8 +6,10 @@ export class Lesson {
     public metadata?: {
       _path: string;
       title: string;
-      type: 'lesson' | 'chapter' | 'part';
+      type: LessonType;
       description?: string;
     },
   ) {}
 }
+
+export type LessonType = 'lesson' | 'chapter' | 'part';
