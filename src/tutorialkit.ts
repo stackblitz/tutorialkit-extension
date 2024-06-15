@@ -2,7 +2,7 @@ import { CMD } from './commands';
 import { Lesson } from './models/Lesson';
 import * as vscode from 'vscode';
 
-let kebabCase: any;
+let kebabCase: (string: string) => string;
 
 (async () => {
   const module = await import('case-anything');

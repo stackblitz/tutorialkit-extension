@@ -9,6 +9,14 @@ import { CMD } from '../commands';
 const metadataFiles = ['meta.md', 'meta.mdx', 'content.md', 'content.mdx'];
 export const tutorialMimeType = 'application/tutorialkit.unit';
 
+let lessonsTreeDataProvider: LessonsTreeDataProvider;
+export function getLessonsTreeDataProvider() {
+  return lessonsTreeDataProvider;
+}
+export function setLessonsTreeDataProvider(provider: LessonsTreeDataProvider) {
+  lessonsTreeDataProvider = provider;
+}
+
 class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
   private lessons: Lesson[] = [];
 
@@ -108,28 +116,15 @@ class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
 export function useLessonTree(context: vscode.ExtensionContext) {
   const workspaceRoot = vscode.workspace.workspaceFolders?.[0].uri;
   if (workspaceRoot) {
-    const lessonsTreeDataProvider = new LessonsTreeDataProvider(
-      workspaceRoot,
-      context,
+    setLessonsTreeDataProvider(
+      new LessonsTreeDataProvider(workspaceRoot, context),
     );
-    vscode.window.createTreeView('tutorialkit-lessons-tree', {
-      treeDataProvider: lessonsTreeDataProvider,
-      canSelectMany: true,
-      dragAndDropController: {
-        dragMimeTypes: [tutorialMimeType],
-        dropMimeTypes: [tutorialMimeType],
-        handleDrag(elements: Lesson[], dataTransfer) {
-          console.log({ elements, dataTransfer });
-        },
-        handleDrop(target: Lesson, dataTransfer) {
-          console.log({ target, dataTransfer });
-        },
-      },
-    });
-
-    vscode.commands.registerCommand('tutorialkit.refresh', () => {
-      lessonsTreeDataProvider.refresh();
-    });
+    context.subscriptions.push(
+      vscode.window.createTreeView('tutorialkit-lessons-tree', {
+        treeDataProvider: getLessonsTreeDataProvider(),
+        canSelectMany: true,
+      }),
+    );
   } else {
     vscode.window.showErrorMessage(
       'Please open a workspace to use the TutorialKit extension.',
