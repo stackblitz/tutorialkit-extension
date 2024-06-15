@@ -50,3 +50,40 @@ export async function addLesson(parent: Lesson) {
     title: lessonName,
   });
 }
+
+export async function addChapter(parent: Lesson) {
+  const folderPath = parent.path;
+  const chapterNumber = parent.children.length + 1;
+
+  // Ask for the name of the new lesson
+  const chapterName = await vscode.window.showInputBox({
+    prompt: 'Enter the name of the new chapter',
+    value: `Chapter ${chapterNumber}`,
+  });
+
+  // Break if no name provided
+  if (!chapterName) {
+    throw new Error('No chapter name provided');
+  }
+
+  // Create the lesson folder and content.mdx file
+  const chapterFolderPath = `${folderPath}/${chapterNumber}-${kebabCase(
+    chapterName,
+  )}`;
+  await vscode.workspace.fs.writeFile(
+    vscode.Uri.file(`${chapterFolderPath}/meta.md`),
+    new TextEncoder().encode(`---\ntitle: ${chapterName}\ntype: chapter\n---\n`),
+  );
+
+  // Refresh the tree view
+  await vscode.commands.executeCommand('tutorialkit.refresh');
+
+  // Open the new lesson
+  return vscode.commands.executeCommand(CMD.GOTO, chapterFolderPath, <
+    Lesson['metadata']
+  >{
+    _path: `${chapterFolderPath}/content.md`,
+    type: 'chapter',
+    title: chapterName,
+  });
+}

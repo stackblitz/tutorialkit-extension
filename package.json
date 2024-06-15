@@ -32,6 +32,10 @@
         "title": "Add Chapter"
       },
       {
+        "command": "tutorialkit.add-part",
+        "title": "Add Part"
+      },
+      {
         "command": "tutorialkit.refresh",
         "title": "Refresh Lessons",
         "icon": "$(refresh)"
