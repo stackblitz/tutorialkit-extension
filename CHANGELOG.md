@@ -4,6 +4,6 @@ All notable changes to the "tutorialkit" extension will be documented in this fi
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [Unreleased]
+## [0.0.9]
 
 - Initial release

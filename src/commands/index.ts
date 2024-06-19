@@ -3,7 +3,7 @@ import tutorialkitGoto from './tutorialkit.goto';
 import tutorialkitRefresh from './tutorialkit.refresh';
 import { addChapter, addLesson } from './tutorialkit.add';
 
-// No need to use this oursite of this file
+// No need to use these consts outsite of this file
 // – use `cmd[name].command` instead
 const CMD = {
   GOTO: 'tutorialkit.goto',

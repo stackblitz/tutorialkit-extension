@@ -2,8 +2,9 @@
   "name": "tutorialkit",
   "displayName": "TutorialKit",
   "description": "TutorialKit support in VS Code",
+  "icon": "resources/icon.png",
   "publisher": "StackBlitz",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "engines": {
     "vscode": "^1.90.0"
   },
