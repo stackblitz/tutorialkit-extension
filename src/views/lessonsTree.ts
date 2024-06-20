@@ -127,8 +127,6 @@ export function useLessonTree(context: vscode.ExtensionContext) {
       }),
     );
   } else {
-    vscode.window.showErrorMessage(
-      'Please open a workspace to use the TutorialKit extension.',
-    );
+    // No workspace.
   }
 }
