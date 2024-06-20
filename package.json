@@ -4,9 +4,9 @@
   "description": "TutorialKit support in VS Code",
   "icon": "resources/tutorialkit-icon.png",
   "publisher": "StackBlitz",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "engines": {
-    "vscode": "^1.90.0"
+    "vscode": "^1.80.0"
   },
   "repository": {
     "url": "https://github.com/stackblitz/tutorialkit"
@@ -89,7 +89,7 @@
   "devDependencies": {
     "@types/mocha": "^10.0.6",
     "@types/node": "18.x",
-    "@types/vscode": "^1.90.0",
+    "@types/vscode": "^1.80.0",
     "@typescript-eslint/eslint-plugin": "^7.11.0",
     "@typescript-eslint/parser": "^7.11.0",
     "@vscode/test-cli": "^0.0.9",
