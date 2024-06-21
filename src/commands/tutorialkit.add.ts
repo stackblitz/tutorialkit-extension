@@ -1,5 +1,4 @@
 import { cmd } from '.';
-import tutorialkitGoto from './tutorialkit.goto';
 import { Lesson, LessonType } from '../models/Lesson';
 import * as vscode from 'vscode';
 

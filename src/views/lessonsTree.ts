@@ -1,10 +1,11 @@
-import * as vscode from 'vscode';
-import * as path from 'path';
 import * as fs from 'fs';
 import grayMatter from 'gray-matter';
+import * as path from 'path';
+import * as vscode from 'vscode';
+import { cmd } from '../commands';
 import { Lesson } from '../models/Lesson';
 import { getIcon } from '../utils/getIcon';
-import { cmd } from '../commands';
+import isTutorialKitWorkspace from '../utils/isTutorialKit';
 
 const metadataFiles = ['meta.md', 'meta.mdx', 'content.md', 'content.mdx'];
 export const tutorialMimeType = 'application/tutorialkit.unit';
@@ -17,8 +18,11 @@ export function setLessonsTreeDataProvider(provider: LessonsTreeDataProvider) {
   lessonsTreeDataProvider = provider;
 }
 
-class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
+export class LessonsTreeDataProvider
+  implements vscode.TreeDataProvider<Lesson>
+{
   private lessons: Lesson[] = [];
+  private isTutorialKitWorkspace = false;
 
   constructor(
     private readonly workspaceRoot: vscode.Uri,
@@ -28,13 +32,18 @@ class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
   }
 
   private loadLessons(): void {
-    const tutorialFolderPath = vscode.Uri.joinPath(
-      this.workspaceRoot,
-      'src',
-      'content',
-      'tutorial',
-    ).fsPath;
-    this.lessons = this.loadLessonsFromFolder(tutorialFolderPath);
+    try {
+      const tutorialFolderPath = vscode.Uri.joinPath(
+        this.workspaceRoot,
+        'src',
+        'content',
+        'tutorial',
+      ).fsPath;
+      this.isTutorialKitWorkspace = true;
+      this.lessons = this.loadLessonsFromFolder(tutorialFolderPath);
+    } catch {
+      this.isTutorialKitWorkspace = false;
+    }
   }
 
   private loadLessonsFromFolder(folderPath: string): Lesson[] {
@@ -114,19 +123,44 @@ class LessonsTreeDataProvider implements vscode.TreeDataProvider<Lesson> {
   }
 }
 
-export function useLessonTree(context: vscode.ExtensionContext) {
-  const workspaceRoot = vscode.workspace.workspaceFolders?.[0].uri;
-  if (workspaceRoot) {
-    setLessonsTreeDataProvider(
-      new LessonsTreeDataProvider(workspaceRoot, context),
-    );
-    context.subscriptions.push(
-      vscode.window.createTreeView('tutorialkit-lessons-tree', {
-        treeDataProvider: getLessonsTreeDataProvider(),
-        canSelectMany: true,
-      }),
-    );
-  } else {
-    // No workspace.
-  }
+export async function useLessonTree(context: vscode.ExtensionContext) {
+  // vscode.workspace.onDidChangeWorkspaceFolders((event) => {
+  //   event.added.forEach((folder) => {
+  //     if (isTutorialKitWorkspace(folder)) {
+  //     }
+  //   });
+  // });
+
+  // vscode.commands.executeCommand('setContext', 'tutorialkit:tree', true);
+
+  cmd.initialize(context);
+
+  // const tutorialWorkpaces = (vscode.workspace.workspaceFolders || []).filter(
+  //   isTutorialKitWorkspace,
+  // );
+  // const selectedWorkspace =
+  //   tutorialWorkpaces.length === 1
+  //     ? tutorialWorkpaces[0]
+  //     : await vscode.window
+  //         .showQuickPick(
+  //           tutorialWorkpaces.map((workspace) => workspace.name),
+  //           {
+  //             placeHolder: 'Select a workspace',
+  //           },
+  //         )
+  //         .then((selected) =>
+  //           tutorialWorkpaces.find((workspace) => workspace.name === selected),
+  //         );
+
+  // if (selectedWorkspace) {
+  //   setLessonsTreeDataProvider(
+  //     new LessonsTreeDataProvider(selectedWorkspace.uri, context),
+  //   );
+  //   context.subscriptions.push(
+  //     vscode.window.createTreeView('tutorialkit-lessons-tree', {
+  //       treeDataProvider: getLessonsTreeDataProvider(),
+  //       canSelectMany: true,
+  //     }),
+  //   );
+  // }
 }

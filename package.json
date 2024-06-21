@@ -21,8 +21,9 @@
   "contributes": {
     "commands": [
       {
-        "command": "tutorialkit.helloWorld",
-        "title": "Hello World"
+        "command": "tutorialkit.select-tutorial",
+        "title": "Select Tutorial",
+        "icon": "$(book)"
       },
       {
         "command": "tutorialkit.add-lesson",
@@ -42,6 +43,24 @@
         "icon": "$(refresh)"
       }
     ],
+    "viewsWelcome": [
+      {
+        "view": "tutorialkit-lessons-tree",
+        "id": "tutorialkit-splashscreen",
+        "contents": "No TutorialKit projects found in this workspace.\n[Rescan workspace](command:tutorialkit.initialize)",
+        "title": "Tutorial",
+        "description": "TutorialKit",
+        "//when": "tutorialkit:splashscreen"
+      },
+      {
+        "view": "tutorialkit-lessons-tree",
+        "id": "tutorialkit-multiple-tutorials",
+        "contents": "Welcome to TutorialKit!\nLooks like there is more than one tutorial in your workspace.\n[Select a tutorial](command:tutorialkit.select-tutorial)",
+        "title": "Tutorial",
+        "description": "TutorialKit",
+        "when": "tutorialkit:multiple-tutorials"
+      }
+    ],
     "views": {
       "explorer": [
         {
@@ -49,15 +68,20 @@
           "name": "Tutorial",
           "visibility": "visible",
           "initialSize": 3,
-          "___when": "tutorialkit:enabled"
+          "__when": "tutorialkit:tree"
         }
       ]
     },
     "menus": {
       "view/title": [
         {
+          "command": "tutorialkit.select-tutorial",
+          "when": "view == tutorialkit-lessons-tree && tutorialkit:multiple-tutorials",
+          "group": "navigation"
+        },
+        {
           "command": "tutorialkit.refresh",
-          "when": "view == tutorialkit-lessons-tree",
+          "when": "view == tutorialkit-lessons-tree && tutorialkit:tree",
           "group": "navigation"
         }
       ],

@@ -3,7 +3,7 @@ import { useCommands } from './commands';
 import { useLessonTree } from './views/lessonsTree';
 
 export function activate(context: vscode.ExtensionContext) {
-  useCommands();
+  useCommands(context);
   useLessonTree(context);
 }
 
