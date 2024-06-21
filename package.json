@@ -47,10 +47,18 @@
       {
         "view": "tutorialkit-lessons-tree",
         "id": "tutorialkit-splashscreen",
-        "contents": "No TutorialKit projects found in this workspace.\n[Rescan workspace](command:tutorialkit.initialize)",
+        "contents": "",
         "title": "Tutorial",
         "description": "TutorialKit",
-        "//when": "tutorialkit:splashscreen"
+        "when": "!tutorialkit:initialized"
+      },
+      {
+        "view": "tutorialkit-lessons-tree",
+        "id": "tutorialkit-splashscreen",
+        "contents": "Looks like there is no TutorialKit project in this workspace.\n[Rescan workspace](command:tutorialkit.initialize?true)",
+        "title": "Tutorial",
+        "description": "TutorialKit",
+        "when": "tutorialkit:initialized && !tutorialkit:multiple-tutorials"
       },
       {
         "view": "tutorialkit-lessons-tree",
@@ -67,8 +75,7 @@
           "id": "tutorialkit-lessons-tree",
           "name": "Tutorial",
           "visibility": "visible",
-          "initialSize": 3,
-          "__when": "tutorialkit:tree"
+          "initialSize": 3
         }
       ]
     },

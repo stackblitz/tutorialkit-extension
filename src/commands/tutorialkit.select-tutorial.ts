@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import isTutorialKitWorkspace from '../utils/isTutorialKit';
 import { cmd } from '.';
 
-export async function selectTutorial(context: vscode.ExtensionContext) {
+export async function selectTutorial() {
   const tutorialWorkpaces = (vscode.workspace.workspaceFolders || []).filter(
     isTutorialKitWorkspace,
   );
@@ -21,6 +21,6 @@ export async function selectTutorial(context: vscode.ExtensionContext) {
           );
 
   if (selectedWorkspace) {
-    cmd.loadTutorial(context, selectedWorkspace.uri);
+    cmd.loadTutorial(selectedWorkspace.uri);
   }
 }

@@ -4,7 +4,7 @@ import tutorialkitRefresh from './tutorialkit.refresh';
 import { addChapter, addLesson } from './tutorialkit.add';
 import { selectTutorial } from './tutorialkit.select-tutorial';
 import { loadTutorial } from './tutorialkit.load-tutorial';
-import { initializeTutorialKit } from './tutorialkit.initialize';
+import { initialize } from './tutorialkit.initialize';
 
 // No need to use these consts outsite of this file
 // – use `cmd[name].command` instead
@@ -19,18 +19,10 @@ const CMD = {
 } as const;
 
 // Register all commands in Code IDE
-export function useCommands(context: vscode.ExtensionContext) {
-  vscode.commands.registerCommand(CMD.INITIALIZE, () => {
-    initializeTutorialKit(context);
-  });
-  vscode.commands.registerCommand(CMD.SELECT_TUTORIAL, () =>
-    selectTutorial(context),
-  );
-  vscode.commands.registerCommand(
-    CMD.LOAD_TUTORIAL,
-    (context: vscode.ExtensionContext, uri: vscode.Uri) =>
-      loadTutorial(context, uri),
-  );
+export function useCommands() {
+  vscode.commands.registerCommand(CMD.INITIALIZE, initialize);
+  vscode.commands.registerCommand(CMD.SELECT_TUTORIAL, selectTutorial);
+  vscode.commands.registerCommand(CMD.LOAD_TUTORIAL, loadTutorial);
   vscode.commands.registerCommand(CMD.GOTO, tutorialkitGoto);
   vscode.commands.registerCommand(CMD.ADD_LESSON, addLesson);
   vscode.commands.registerCommand(CMD.ADD_CHAPTER, addChapter);
@@ -39,7 +31,7 @@ export function useCommands(context: vscode.ExtensionContext) {
 
 // Create typesafe commands
 export const cmd = {
-  initialize: createExecutor<typeof initializeTutorialKit>(CMD.INITIALIZE),
+  initialize: createExecutor<typeof initialize>(CMD.INITIALIZE),
   selectTutorial: createExecutor<typeof selectTutorial>(CMD.SELECT_TUTORIAL),
   loadTutorial: createExecutor<typeof loadTutorial>(CMD.LOAD_TUTORIAL),
   goto: createExecutor<typeof tutorialkitGoto>(CMD.GOTO),

@@ -123,7 +123,7 @@ export class LessonsTreeDataProvider
   }
 }
 
-export async function useLessonTree(context: vscode.ExtensionContext) {
+export async function useLessonTree() {
   // vscode.workspace.onDidChangeWorkspaceFolders((event) => {
   //   event.added.forEach((folder) => {
   //     if (isTutorialKitWorkspace(folder)) {
@@ -133,7 +133,7 @@ export async function useLessonTree(context: vscode.ExtensionContext) {
 
   // vscode.commands.executeCommand('setContext', 'tutorialkit:tree', true);
 
-  cmd.initialize(context);
+  cmd.initialize();
 
   // const tutorialWorkpaces = (vscode.workspace.workspaceFolders || []).filter(
   //   isTutorialKitWorkspace,
