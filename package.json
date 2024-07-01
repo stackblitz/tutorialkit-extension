@@ -21,8 +21,9 @@
   "contributes": {
     "commands": [
       {
-        "command": "tutorialkit.helloWorld",
-        "title": "Hello World"
+        "command": "tutorialkit.select-tutorial",
+        "title": "Select Tutorial",
+        "icon": "$(book)"
       },
       {
         "command": "tutorialkit.add-lesson",
@@ -42,22 +43,52 @@
         "icon": "$(refresh)"
       }
     ],
+    "viewsWelcome": [
+      {
+        "view": "tutorialkit-lessons-tree",
+        "id": "tutorialkit-splashscreen",
+        "contents": "",
+        "title": "Tutorial",
+        "description": "TutorialKit",
+        "when": "!tutorialkit:initialized"
+      },
+      {
+        "view": "tutorialkit-lessons-tree",
+        "id": "tutorialkit-splashscreen",
+        "contents": "Looks like there is no TutorialKit project in this workspace.\n[Rescan workspace](command:tutorialkit.initialize?true)",
+        "title": "Tutorial",
+        "description": "TutorialKit",
+        "when": "tutorialkit:initialized && !tutorialkit:multiple-tutorials"
+      },
+      {
+        "view": "tutorialkit-lessons-tree",
+        "id": "tutorialkit-multiple-tutorials",
+        "contents": "Welcome to TutorialKit!\nLooks like there is more than one tutorial in your workspace.\n[Select a tutorial](command:tutorialkit.select-tutorial)",
+        "title": "Tutorial",
+        "description": "TutorialKit",
+        "when": "tutorialkit:multiple-tutorials"
+      }
+    ],
     "views": {
       "explorer": [
         {
           "id": "tutorialkit-lessons-tree",
           "name": "Tutorial",
           "visibility": "visible",
-          "initialSize": 3,
-          "___when": "tutorialkit:enabled"
+          "initialSize": 3
         }
       ]
     },
     "menus": {
       "view/title": [
         {
+          "command": "tutorialkit.select-tutorial",
+          "when": "view == tutorialkit-lessons-tree && tutorialkit:multiple-tutorials",
+          "group": "navigation"
+        },
+        {
           "command": "tutorialkit.refresh",
-          "when": "view == tutorialkit-lessons-tree",
+          "when": "view == tutorialkit-lessons-tree && tutorialkit:tree",
           "group": "navigation"
         }
       ],
