@@ -1,3 +1,5 @@
+# The source this project is now moved to [the main tutorialkit repository](https://github.com/stackblitz/tutorialkit). This repo is archived.
+
 # TutorialKit Code Extension
 
 **Status**: Preview
